@@ -1,38 +1,55 @@
-from math import sin, cos, tan, atan, atan2, sqrt, hypot
-from random import uniform
+from math import sin, cos, tan, atan, atan2, sqrt, hypot, exp
 from utils.game_of_life import get_life_value
 
 # --- Animation Definitions ---
 # Each function now takes (t, i, x, y) and returns a single float.
 # The value will be clipped to [-1.0, 1.0] and used for brightness.
 ANIMATIONS = {
-    "Sine Wave": lambda t, i, x, y: sin(x * 0.4 + t * 2.0),
     "Plasma": lambda t, i, x, y: (
         sin(x * 0.2 + t)
         + sin(y * 0.3 + t)
         + sin(sqrt((x - 7.5) ** 2 + (y - 7.5) ** 2) * 0.3 + t)
     )
     / 3.0,
-    "Expanding Rings": lambda t, i, x, y: cos(
-        sqrt((x - 7.5) ** 2 + (y - 7.5) ** 2) * 0.7 - t * 3
-    ),
-    "Random Noise": lambda t, i, x, y: uniform(-1.0, 1.0),
     "Fireworks": lambda t, i, x, y: (-0.4 / (hypot(x - t % 10, y - t % 8) - t % 2 * 9)),
-    "Sierpinski": lambda t, i, x, y: (4 * t & i & x & y),
     "Animated Smooth Noise": lambda t, i, x, y: (cos(t + i + x * y)),
-    "3D Checker": lambda t, i, x, y: (
-        (((x - 8) / y + t * 5) & 1 ^ 1 / y * 8 & 1) * y / 5
-    ),
-    "Dialogue": lambda t, i, x, y: (1 / 32 * tan(t / 64 * x * tan(i - x))),
-    "Rotation": lambda t, i, x, y: (sin(2 * atan((y - 7.5) / (x - 7.5)) + 5 * t)),
+    "Dialogue": lambda t, i, x, y: (1 / 32 * tan((2 * t) / 64 * x * tan(i - x))),
     "Spiral": lambda t, i, x, y: sin(
         atan2(y - 7.5, x - 7.5) * 3 + sqrt((x - 7.5) ** 2 + (y - 7.5) ** 2) - t * 2
     ),
-    "Checker Pulse": lambda t, i, x, y: sin((x + y + t * 8) * 0.5),
-    "Tunnel": lambda t, i, x, y: cos(
-        sqrt((x - 7.5) ** 2 + (y - 7.5) ** 2) - t * 6 + atan2(y - 7.5, x - 7.5)
-    ),
-    "Interference": lambda t, i, x, y: sin(x * 0.5 + t * 2) * cos(y * 0.5 - t * 2),
-    "Lissajous": lambda t, i, x, y: sin(x * 0.3 + t) + cos(y * 0.4 - t),
     "Game of Life": lambda t, i, x, y: get_life_value(t, i, x, y),
+    "Wave Packet": lambda t, i, x, y: sin(0.5 * x - t * 3)
+    * exp(-((x - 8 - t * 2) ** 2 + (y - 8) ** 2) / 20),
+    "Circular Interference": lambda t, i, x, y: sin(
+        sqrt((x - 4) ** 2 + (y - 8) ** 2) - t * 2
+    )
+    + sin(sqrt((x - 12) ** 2 + (y - 8) ** 2) - t * 2),
+    "Bessel Mode": lambda t, i, x, y: (
+        sin(sqrt((x - 7.5) ** 2 + (y - 7.5) ** 2) - t * 2)
+        * (1.2 - 0.08 * sqrt((x - 7.5) ** 2 + (y - 7.5) ** 2))
+    ),
+    "Lissajous Figure": lambda t, i, x, y: sin(0.3 * x + t) * cos(0.4 * y - t),
+    "Dynamic Magnetic Field": lambda t, i, x, y: sin(
+        atan2(y - 7.5, x - 7.5) * 4 + 2 * sin(t + sqrt((x - 7.5) ** 2 + (y - 7.5) ** 2))
+    )
+    * cos(0.5 * sqrt((x - 7.5) ** 2 + (y - 7.5) ** 2) - t),
+    "Quantum Harmonic Oscillator": lambda t, i, x, y: (
+        2
+        * sin(0.4 * (x - 7.5))
+        * sin(0.4 * (y - 7.5))
+        * cos(t)
+        * exp(-0.03 * ((x - 7.5) ** 2 + (y - 7.5) ** 2))
+    ),
+    "Double Pendulum Shadow": lambda t, i, x, y: (
+        sin(t + sin(0.2 * x) * cos(0.3 * y + t))
+        * cos(t + cos(0.2 * y) * sin(0.3 * x - t))
+    ),
+    "Magnetic Dipole Field": lambda t, i, x, y: (
+        (2 * (y - 7.5) ** 2 - (x - 7.5) ** 2)
+        / ((x - 7.5) ** 2 + (y - 7.5) ** 2 + 1e-3) ** 1.5
+        * sin(2 * t)
+    ),
+    "Lorenz Slice": lambda t, i, x, y: (
+        sin(0.2 * x + 10 * sin(0.1 * y + t)) * cos(0.2 * y + 10 * cos(0.1 * x - t))
+    ),
 }

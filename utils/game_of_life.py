@@ -22,7 +22,7 @@ def _step_life():
 
 def get_life_value(t, i, x, y):
     """
-    Returns 1.0 for alive, -1.0 for dead. Updates the grid every 0.2s.
+    Returns 1.0 for alive, 0.0 for dead, -1.0 for 'low life' (cell with 1 neighbor).
     t: time in seconds (float)
     i: pixel index (unused)
     x, y: pixel coordinates
@@ -34,4 +34,18 @@ def get_life_value(t, i, x, y):
     if step != _last_update:
         _step_life()
         _last_update = step
-    return 1.0 if _grid[int(y) % HEIGHT, int(x) % WIDTH] else -1.0
+    xi, yi = int(x) % WIDTH, int(y) % HEIGHT
+    alive = _grid[yi, xi]
+    # Count neighbors for this cell
+    neighbors = sum(
+        _grid[(yi + dy) % HEIGHT, (xi + dx) % WIDTH]
+        for dy in (-1, 0, 1)
+        for dx in (-1, 0, 1)
+        if not (dx == 0 and dy == 0)
+    )
+    if alive:
+        return 1.0
+    elif neighbors == 1:
+        return -1.0
+    else:
+        return 0.0
