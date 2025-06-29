@@ -1,5 +1,6 @@
-from math import sin, cos, tan, atan, atan2, sqrt, hypot, exp
+from math import sin, cos, tan, atan2, sqrt, hypot, exp
 from utils.game_of_life import get_life_value
+from utils.ising import get_ising_value, reset_ising_model
 
 # --- Animation Definitions ---
 # Each function now takes (t, i, x, y) and returns a single float.
@@ -51,5 +52,29 @@ ANIMATIONS = {
     ),
     "Lorenz Slice": lambda t, i, x, y: (
         sin(0.2 * x + 10 * sin(0.1 * y + t)) * cos(0.2 * y + 10 * cos(0.1 * x - t))
+    ),
+    "Ising Model": lambda t, i, x, y: (
+        # Reset on first call with faster annealing
+        get_ising_value(t, i, x, y)
+        if t > 0.1 or reset_ising_model(3.0, 0.05, 0.5)
+        else 0
+    ),
+    "Ising Model (Slow Cooling)": lambda t, i, x, y: (
+        # Reset on first call with slower annealing
+        get_ising_value(t, i, x, y)
+        if t > 0.1 or reset_ising_model(2.5, 0.02, 0.5)
+        else 0
+    ),
+    "Ising Model (Fast Cooling)": lambda t, i, x, y: (
+        # Reset on first call with faster annealing
+        get_ising_value(t, i, x, y)
+        if t > 0.1 or reset_ising_model(2.5, 0.1, 0.5)
+        else 0
+    ),
+    "Ising Model (High Temp)": lambda t, i, x, y: (
+        # Reset on first call with higher temperature
+        get_ising_value(t, i, x, y)
+        if t > 0.1 or reset_ising_model(3.5, 0.05, 0.8)
+        else 0
     ),
 }
