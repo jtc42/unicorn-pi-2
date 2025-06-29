@@ -59,18 +59,6 @@ ANIMATIONS = {
         if t > 0.1 or reset_ising_model(3.0, 0.05, 0.5)
         else 0
     ),
-    "Ising Model (Slow Cooling)": lambda t, i, x, y: (
-        # Reset on first call with slower annealing
-        get_ising_value(t, i, x, y)
-        if t > 0.1 or reset_ising_model(2.5, 0.02, 0.5)
-        else 0
-    ),
-    "Ising Model (Fast Cooling)": lambda t, i, x, y: (
-        # Reset on first call with faster annealing
-        get_ising_value(t, i, x, y)
-        if t > 0.1 or reset_ising_model(2.5, 0.1, 0.5)
-        else 0
-    ),
     "Ising Model (High Temp)": lambda t, i, x, y: (
         # Reset on first call with higher temperature
         get_ising_value(t, i, x, y)
