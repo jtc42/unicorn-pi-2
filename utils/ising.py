@@ -1,6 +1,4 @@
 import numpy as np
-import random
-import math
 
 
 class IsingModel:
@@ -27,36 +25,29 @@ class IsingModel:
 
     def _heatbath_step(self):
         """
-        Implement the heatbath algorithm for the Ising model.
-        This will update the entire grid once using the heatbath algorithm.
+        Vectorized red-black (checkerboard) heatbath update for the Ising model using numpy.
+        This preserves asynchronous-like dynamics and avoids checkerboard artifacts.
         """
-        # Make a copy of the grid to update
-        for _ in range(self.width * self.height):
-            # Pick a random site
-            x = random.randint(0, self.width - 1)
-            y = random.randint(0, self.height - 1)
-
+        grid = self._grid
+        for parity in [0, 1]:
             # Calculate neighbor sum with periodic boundary conditions
             neighbors_sum = (
-                self._grid[(y - 1) % self.height, x]  # North
-                + self._grid[(y + 1) % self.height, x]  # South
-                + self._grid[y, (x - 1) % self.width]  # West
-                + self._grid[y, (x + 1) % self.width]  # East
+                np.roll(grid, 1, axis=0)  # North
+                + np.roll(grid, -1, axis=0)  # South
+                + np.roll(grid, 1, axis=1)  # West
+                + np.roll(grid, -1, axis=1)  # East
             )
-
-            # Calculate energy difference
             delta_E = 2 * self.j * neighbors_sum
-
-            # Add external field if present
             if self.h != 0:
                 delta_E += 2 * self.h
-
-            # Calculate probability according to heatbath algorithm
-            r = random.random()
-            flip_probability = 1 / (1 + math.exp(-delta_E / self.temperature))
-
-            # Assign new spin based on the probability
-            self._grid[y, x] = 1 if r < flip_probability else -1
+            flip_prob = 1 / (1 + np.exp(-delta_E / self.temperature))
+            rand_vals = np.random.rand(self.height, self.width)
+            # Create checkerboard mask for current parity
+            mask = np.indices((self.height, self.width)).sum(axis=0) % 2 == parity
+            # Only update spins at the current parity
+            update = np.where(rand_vals < flip_prob, 1, -1)
+            grid = np.where(mask, update, grid)
+        self._grid = grid
 
     def get_ising_value(self, t, i, x, y):
         """
