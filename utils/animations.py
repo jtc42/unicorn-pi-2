@@ -50,7 +50,8 @@ ANIMATIONS = {
         * sin(2 * t)
     ),
     "Lorenz Slice": lambda t, i, x, y: (
-        sin(0.2 * x + 10 * sin(0.1 * y + t)) * cos(0.2 * y + 10 * cos(0.1 * x - t))
+        sin(0.2 * x + 10 * sin(0.1 * y + (0.5 * t)))
+        * cos(0.2 * y + 10 * cos(0.1 * x - (0.5 * t)))
     ),
     "Ising Model": lambda t, i, x, y: (
         # Reset on first call with faster annealing
