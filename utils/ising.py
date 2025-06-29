@@ -56,13 +56,8 @@ class IsingModel:
         i: pixel index (unused)
         x, y: pixel coordinates
         """
-        # Update every 0.1 seconds
-        step_time = 0.1
-        step = int(t // step_time)
-
-        if step != self._last_update:
+        if t != self._last_update:
             self._heatbath_step()
-            self._last_update = step
 
             # Gradually lower the temperature (simulated annealing)
             self.temperature = max(
@@ -73,6 +68,8 @@ class IsingModel:
         # Get the spin value at the requested position
         xi, yi = int(x) % self.width, int(y) % self.height
         spin = self._grid[yi, xi]
+
+        self._last_update = t  # Update last update time
 
         return float(spin)
 
