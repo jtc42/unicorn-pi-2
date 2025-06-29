@@ -27,7 +27,7 @@ MAX_BRIGHTNESS = 0.8  # Maximum brightness level
 # A list of minutes to trigger an animation on (e.g., [0] for on the hour)
 ANIMATION_TRIGGER_MINUTES = [0, 15, 30, 45]
 # How long the animation should run in seconds
-ANIMATION_DURATION = 20
+ANIMATION_DURATION = 30
 # Colors for the new animation rendering mode
 POSITIVE_COLOR = HOUR_COLOR
 NEGATIVE_COLOR = MINUTE_COLOR

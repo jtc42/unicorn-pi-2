@@ -15,8 +15,8 @@ except ImportError:
 
 WIDTH, HEIGHT = unicornhathd.get_shape()
 
-DURATION = 20  # seconds per animation in cycle mode
-SINGLE_ANIM_DURATION = 30  # seconds when running a specific animation
+DURATION = 30  # seconds per animation in cycle mode
+SINGLE_ANIM_DURATION = 60  # seconds when running a specific animation
 
 
 def run_animation(name, func, duration):
