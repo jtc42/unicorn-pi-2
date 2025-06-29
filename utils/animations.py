@@ -19,8 +19,8 @@ ANIMATIONS = {
         atan2(y - 7.5, x - 7.5) * 3 + sqrt((x - 7.5) ** 2 + (y - 7.5) ** 2) - t * 2
     ),
     "Game of Life": lambda t, i, x, y: get_life_value(t, i, x, y),
-    "Wave Packet": lambda t, i, x, y: sin(0.5 * x - t * 3)
-    * exp(-((x - 8 - t * 2) ** 2 + (y - 8) ** 2) / 20),
+    "Wave Packet": lambda t, i, x, y: sin(0.5 * x - ((t % 16) - 8) * 2)
+    * exp(-((x - 8 - ((t % 16) - 8) * 2) ** 2 + (y - 8) ** 2) / 20),
     "Circular Interference": lambda t, i, x, y: sin(
         sqrt((x - 4) ** 2 + (y - 8) ** 2) - t * 2
     )
