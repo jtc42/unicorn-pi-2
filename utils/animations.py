@@ -1,5 +1,5 @@
 from math import sin, cos, tan, atan2, sqrt, hypot, exp
-from utils.game_of_life import get_life_value
+from utils.game_of_life import get_life_value, reset_grid
 from utils.ising import get_ising_value, reset_ising_model
 
 # --- Animation Definitions ---
@@ -18,7 +18,9 @@ ANIMATIONS = {
     "Spiral": lambda t, i, x, y: sin(
         atan2(y - 7.5, x - 7.5) * 3 + sqrt((x - 7.5) ** 2 + (y - 7.5) ** 2) - t * 2
     ),
-    "Game of Life": lambda t, i, x, y: get_life_value(t, i, x, y),
+    "Game of Life": lambda t, i, x, y: (
+        get_life_value(t, i, x, y) if t > 0.1 or reset_grid() else 0
+    ),
     "Wave Packet": lambda t, i, x, y: sin(0.5 * x - ((t % 16) - 8) * 2)
     * exp(-((x - 8 - ((t % 16) - 8) * 2) ** 2 + (y - 8) ** 2) / 20),
     "Circular Interference": lambda t, i, x, y: 0.5

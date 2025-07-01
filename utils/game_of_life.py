@@ -49,3 +49,10 @@ def get_life_value(t, i, x, y):
         return -1.0
     else:
         return 0.0
+
+
+def reset_grid():
+    global _grid, _last_update
+    _grid = np.random.choice([0, 1], size=(HEIGHT, WIDTH))
+    _last_update = -1
+    return True
